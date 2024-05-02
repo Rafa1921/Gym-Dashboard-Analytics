@@ -1,0 +1,10 @@
+/* CustomerReview.css */
+
+.CustomerReview {
+  width: 100%;
+  height: 300px; /* Set a smaller height */
+  padding-bottom: -10%;
+  padding-top: -40%;
+  padding: -29%;
+  padding-right: -1%;
+}

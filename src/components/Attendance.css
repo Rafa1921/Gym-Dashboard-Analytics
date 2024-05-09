@@ -1,0 +1,28 @@
+/* src/components/Attendance.css */
+
+.attendance-container {
+  margin-top: 20px;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 8px;
+  border: 1px solid #e13a3a;
+}
+
+.attendance-table th {
+  background-color: #eaaa12;
+  text-align: left;
+}
+button {
+  color: rgb(241, 245, 245);
+  background-color: black;
+}
+.attendance-table {
+  background-color: rgb(9, 206, 78);
+}

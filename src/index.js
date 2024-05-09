@@ -1,9 +1,19 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client"; // Import createRoot from react-dom/client
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
+import Attendance from "./components/Attendance";
 
-ReactDOM.render(<App />, document.getElementById("root"));
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Use createRoot instead of ReactDOM.render
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter basename="/">
+      <Routes>
+        {" "}
+        {/* Wrap your routes with a <Routes> element */}
+        <Route exact path="/" element={<App />} />
+        <Route path="/attendance" element={<Attendance />} />
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
+);

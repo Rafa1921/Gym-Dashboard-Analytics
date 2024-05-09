@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -47,25 +47,42 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
   const [description, setDescription] = useState("");
   const [productName, setProductName] = useState("");
   const [creatingOrder, setCreatingOrder] = useState(false); // State to track order creation
+  const [error, setError] = useState(""); // State to store validation error message
 
-  const [rows, setRows] = useState([
-    {
-      id: uuidv4(),
-      name: "Dumbbells",
-      trackingId: 12345,
-      date: "2024-05-26",
-      status: "Approved",
-      imageUrl: dumbbellImage,
-    },
-    {
-      id: uuidv4(),
-      name: "Gym Bar",
-      trackingId: 67890,
-      date: "2024-05-25",
-      status: "Pending",
-      imageUrl: barImage,
-    },
-  ]);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    // Simulate fetching data from a mock API
+    const fetchData = async () => {
+      try {
+        // Simulate delay for fetching data
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Mock data
+        const data = [
+          {
+            id: uuidv4(),
+            name: "Dumbbells",
+            trackingId: 12345,
+            date: "2024-05-26",
+            status: "Approved",
+            imageUrl: dumbbellImage,
+          },
+          {
+            id: uuidv4(),
+            name: "Gym Bar",
+            trackingId: 67890,
+            date: "2024-05-25",
+            status: "Pending",
+            imageUrl: barImage,
+          },
+        ];
+        setRows(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleRowClick = (name, imageUrl) => {
     setSelectedRow(name);
@@ -78,7 +95,6 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
   const handleCloseModal = () => {
     setModalOpen(false);
     if (file && newImageUrl) {
-      handleUpdate();
     }
     // Reset states after closing the modal
     setFile(null);
@@ -86,6 +102,7 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
     setDescription("");
     setProductName("");
     setCreatingOrder(false);
+    setError(""); // Clear error message
   };
 
   const handleUpdate = () => {
@@ -122,23 +139,39 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
   };
 
   const handleConfirmCreateOrder = () => {
+    // Perform validation
+    if (!productName) {
+      setError("Product name is required.");
+      return;
+    }
+
+    if (!file || !newImageUrl) {
+      setError("Please upload an image.");
+      return;
+    }
+
     // Create a new order
-    setRows([
-      ...rows,
-      {
-        id: uuidv4(),
-        name: productName || "New Product",
-        trackingId: 323,
-        date: new Date().toISOString().slice(0, 10),
-        status: "Pending",
-        imageUrl: newImageUrl || "", // Use the uploaded image URL
-      },
-    ]);
+    const newOrder = {
+      id: uuidv4(),
+      name: productName,
+      trackingId: 323,
+      date: new Date().toISOString().slice(0, 10),
+      status: "Pending",
+      imageUrl: newImageUrl || "", // Use the uploaded image URL
+    };
+
+    console.log("New Order:", newOrder); // Log the new order details
+
+    // Update the rows state with the new order
+    setRows([...rows, newOrder]);
+
     // Close the modal and reset states
     setModalOpen(false);
     setCreatingOrder(false);
     setProductName("");
     setNewImageUrl("");
+    setFile(null);
+    setError(""); // Clear error message
   };
 
   return (
@@ -219,6 +252,8 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
                 placeholder="Product Name"
                 onChange={(e) => setProductName(e.target.value)}
               />
+              {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+              {/* Display error message */}
               <input
                 type="file"
                 accept="image/*"

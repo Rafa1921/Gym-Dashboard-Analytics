@@ -1,6 +1,7 @@
+import React from "react";
 import "./App.css";
 import MainDash from "./components/MainDash/MainDash";
-import RightSide from "./components/RigtSide/RightSide";
+import RightSide from "./components/RightSide/RightSide"; // Fixed import path
 import Sidebar from "./components/Sidebar";
 
 function App() {

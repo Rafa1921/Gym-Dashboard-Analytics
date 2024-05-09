@@ -1,27 +1,19 @@
-// Sidebar imports
-import { UilDumbbell, UilClipboardAlt } from "@iconscout/react-unicons";
-
-// Analytics Cards imports
+import { UilClipboardAlt } from "@iconscout/react-unicons";
+// eslint-disable-next-line
+import { Link } from "react-router-dom";
 import { UilUsdSquare, UilMoneyWithdrawal } from "@iconscout/react-unicons";
-
-// Recent Card Imports
 import img1 from "../imgs/img1.png";
 import img2 from "../imgs/img2.png";
 import img3 from "../imgs/img3.png";
 
-// Sidebar Data
 export const SidebarData = [
   {
-    icon: UilClipboardAlt, // Replace with gym-related icon
-    heading: "Workouts", // Update heading to match the category
-  },
-  {
-    icon: UilDumbbell, // Replace with gym-related icon
-    heading: "Equipment", // Update heading to match the category
+    icon: UilClipboardAlt,
+    heading: "Attendance",
+    path: "/attendance",
   },
 ];
 
-// Analytics Cards Data
 export const cardsData = [
   {
     title: "Sales",
@@ -73,7 +65,6 @@ export const cardsData = [
   },
 ];
 
-// Recent Update Card Data
 export const UpdatesData = [
   {
     img: img1,
@@ -89,7 +80,7 @@ export const UpdatesData = [
   },
   {
     img: img3,
-    name: "My one and Only",
+    name: "My One and Only",
     noti: "Dumbell is a stress reliever for me.",
     time: "2 hours ago",
   },

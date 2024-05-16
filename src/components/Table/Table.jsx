@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Modal from "@mui/material/Modal";
-import { v4 as uuidv4 } from "uuid"; // Import uuid
+import { v4 as uuidv4 } from "uuid";
 import dumbbellImage from "../assets/dumbbell.png";
 import barImage from "../assets/bar.png";
 import "./Table.css";
@@ -46,18 +46,15 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState("");
   const [productName, setProductName] = useState("");
-  const [creatingOrder, setCreatingOrder] = useState(false); // State to track order creation
-  const [error, setError] = useState(""); // State to store validation error message
+  const [creatingOrder, setCreatingOrder] = useState(false);
+  const [error, setError] = useState("");
 
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // Simulate fetching data from a mock API
     const fetchData = async () => {
       try {
-        // Simulate delay for fetching data
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        // Mock data
         const data = [
           {
             id: uuidv4(),
@@ -87,25 +84,26 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
   const handleRowClick = (name, imageUrl) => {
     setSelectedRow(name);
     setImageUrl(imageUrl);
-    setNewImageUrl(""); // Reset new image URL
+    setNewImageUrl("");
     setDescription(descriptions[name]);
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    if (file && newImageUrl) {
-    }
-    // Reset states after closing the modal
     setFile(null);
     setNewImageUrl("");
     setDescription("");
     setProductName("");
     setCreatingOrder(false);
-    setError(""); // Clear error message
+    setError("");
   };
 
   const handleUpdate = () => {
+    console.log("Inside handleUpdate");
+    console.log("file:", file);
+    console.log("newImageUrl:", newImageUrl);
+
     if (file) {
       const updatedRows = rows.map((row) => {
         if (row.name === selectedRow) {
@@ -120,26 +118,30 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
       });
       setRows(updatedRows);
       console.log("Image updated:", newImageUrl || imageUrl);
+      setRows(updatedRows);
+      setSelectedRow(true);
+      setModalOpen(false);
+    } else {
+      console.log("file selected");
     }
   };
 
   const handleDelete = () => {
     if (selectedRow) {
       const updatedRows = rows.filter((row) => row.name !== selectedRow);
-      console.log("Deleted:", selectedRow); // Log the deleted row
+      console.log("Deleted:", selectedRow);
       setRows(updatedRows);
       setSelectedRow(null);
-      setModalOpen(false);
+      handleCloseModal();
     }
   };
 
   const handleCreateOrder = () => {
-    setCreatingOrder(true); // Set creatingOrder state to true to open the modal
-    setModalOpen(true); // Open the modal for creating order
+    setCreatingOrder(true);
+    setModalOpen(true);
   };
 
   const handleConfirmCreateOrder = () => {
-    // Perform validation
     if (!productName) {
       setError("Product name is required.");
       return;
@@ -150,53 +152,39 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
       return;
     }
 
-    // Create a new order
     const newOrder = {
       id: uuidv4(),
       name: productName,
       trackingId: 323,
       date: new Date().toISOString().slice(0, 10),
       status: "Pending",
-      imageUrl: newImageUrl || "", // Use the uploaded image URL
+      imageUrl: newImageUrl || "",
     };
 
-    console.log("New Order:", newOrder); // Log the new order details
+    console.log("New Order:", newOrder);
 
-    // Update the rows state with the new order
     setRows([...rows, newOrder]);
 
-    // Close the modal and reset states
-    setModalOpen(false);
-    setCreatingOrder(false);
-    setProductName("");
-    setNewImageUrl("");
-    setFile(null);
-    setError(""); // Clear error message
+    handleCloseModal();
   };
 
   return (
     <div className="Table">
       <h3>Recent Gym Orders</h3>
-      {rows.length > 0 && (
-        <button
-          onClick={handleCreateOrder}
-          disabled={creatingOrder}
-          style={{
-            backgroundColor: "blue",
-            color: "white",
-            padding: "10px",
-            border: "none",
-            cursor: "pointer",
-            borderRadius: "5px",
-            // Add hover effect
-            ":hover": {
-              backgroundColor: "darkblue",
-            },
-          }}
-        >
-          Create Order
-        </button>
-      )}
+      <button
+        onClick={handleCreateOrder}
+        disabled={creatingOrder}
+        style={{
+          backgroundColor: "blue",
+          color: "white",
+          padding: "10px",
+          border: "none",
+          cursor: "pointer",
+          borderRadius: "5px",
+        }}
+      >
+        Create Order
+      </button>
       <TableContainer
         component={Paper}
         style={{
@@ -252,8 +240,7 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
                 placeholder="Product Name"
                 onChange={(e) => setProductName(e.target.value)}
               />
-              {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-              {/* Display error message */}
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <input
                 type="file"
                 accept="image/*"
@@ -295,7 +282,7 @@ const BasicTable = ({ handleUpdateOrder, handleDeleteOrder }) => {
                 {description}
               </p>
               <button onClick={handleUpdate}>Update</button>
-              <button onClick={() => handleDelete(selectedRow)}>Delete</button>
+              <button onClick={handleDelete}>Delete</button>
             </>
           )}
         </div>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import "./Sidebar.css";
-import Logo from "../imgs/logo.png";
+import { Link, useNavigate } from "react-router-dom";
 import { SidebarData } from "../Data/Data";
-import { UilBars } from "@iconscout/react-unicons";
+import { UilSignOutAlt } from "@iconscout/react-unicons";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import Logo from "../imgs/logo.png";
+import "./Sidebar.css";
 
 const Sidebar = () => {
   const [selected, setSelected] = useState(0);
-  const [expanded, setExpaned] = useState(true);
+  const navigate = useNavigate();
 
   const sidebarVariants = {
     true: {
@@ -19,21 +19,14 @@ const Sidebar = () => {
     },
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    navigate("/login");
+  };
+
   return (
     <>
-      <div
-        className="bars"
-        style={expanded ? { left: "60%" } : { left: "5%" }}
-        onClick={() => setExpaned(!expanded)}
-      >
-        <UilBars />
-      </div>
-      <motion.div
-        className="sidebar"
-        variants={sidebarVariants}
-        animate={window.innerWidth <= 768 ? `${expanded}` : ""}
-      >
-        {/* logo */}
+      <motion.div className="sidebar" variants={sidebarVariants}>
         <div className="logo">
           <img src={Logo} alt="logo" />
           <span>
@@ -54,8 +47,10 @@ const Sidebar = () => {
               </div>
             </Link>
           ))}
-          {/* signoutIcon */}
-          <div className=""></div>
+          <div className="menuItem" onClick={handleLogout}>
+            <UilSignOutAlt />
+            <span>Logout</span>
+          </div>
         </div>
       </motion.div>
     </>
